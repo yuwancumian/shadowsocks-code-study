@@ -1,77 +1,12 @@
 shadowsocks
 ===========
 
-[![PyPI version]][PyPI]
-[![Build Status]][Travis CI]
-[![Coverage Status]][Coverage]
+> 学习一门语言最快最有效的方法就是去阅读优秀的代码!
 
-A fast tunnel proxy that helps you bypass firewalls.
+为什么要读shadowsocks的代码:
 
-Features:
-- TCP & UDP support
-- User management API
-- TCP Fast Open
-- Workers and graceful restart
-- Destination IP blacklist
+- 一个非常有用的项目,工作生活离不开它(翻墙)
+- 我对python,network,linux拥有很大的兴趣
+- 我非常热爱开源,自己暂时写不出这么好的项目,只能拜读大神的作品了
 
-Server
-------
-
-### Install
-
-Debian / Ubuntu:
-
-    apt-get install python-pip
-    pip install shadowsocks
-
-CentOS:
-
-    yum install python-setuptools && easy_install pip
-    pip install shadowsocks
-
-Windows:
-
-See [Install Server on Windows]
-
-### Usage
-
-    ssserver -p 443 -k password -m aes-256-cfb
-
-To run in the background:
-
-    sudo ssserver -p 443 -k password -m aes-256-cfb --user nobody -d start
-
-To stop:
-
-    sudo ssserver -d stop
-
-To check the log:
-
-    sudo less /var/log/shadowsocks.log
-
-Check all the options via `-h`. You can also use a [Configuration] file
-instead.
-
-Documentation
--------------
-
-You can find all the documentation in the [Wiki].
-
-License
--------
-
-Apache License
-
-
-
-
-
-
-
-[Build Status]:      https://img.shields.io/travis/shadowsocks/shadowsocks/master.svg?style=flat
-[Coverage Status]:   https://jenkins.shadowvpn.org/result/shadowsocks
-[Coverage]:          https://jenkins.shadowvpn.org/job/Shadowsocks/ws/PYENV/py34/label/linux/htmlcov/index.html
-[PyPI]:              https://pypi.python.org/pypi/shadowsocks
-[PyPI version]:      https://img.shields.io/pypi/v/shadowsocks.svg?style=flat
-[Travis CI]:         https://travis-ci.org/shadowsocks/shadowsocks
-
+详细注释版,适合新手!
