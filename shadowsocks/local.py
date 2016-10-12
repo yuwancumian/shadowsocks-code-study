@@ -15,6 +15,14 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+#使用__future__模块来让python 2.X使用3.X的新功能
+"""
+1. 建议使用绝对引用
+2. python3.X中,所有的除法都是精确除法
+3. python3.X中,print是一个func,带入该模块后,默认的print不能使用了
+4. 使用with语句
+引用__future__是为了更多地兼容python2.X和python3.X
+"""
 from __future__ import absolute_import, division, print_function, \
     with_statement
 
@@ -22,20 +30,22 @@ import sys
 import os
 import logging
 import signal
-
+#把当前目录加入到sys.path的最前面,保证重名的时候出现混乱引入
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../'))
 from shadowsocks import shell, daemon, eventloop, tcprelay, udprelay, asyncdns
 
 
 @shell.exception_handle(self_=False, exit_code=1)
 def main():
+    #检查python的版本
     shell.check_python()
 
     # fix py2exe
+    #和 cx_freeze 这个库有关。这是一个用于在 windows 下将程序打包成 exe 的库，会将一个变量 frozen 注入到 sys 中。
     if hasattr(sys, "frozen") and sys.frozen in \
             ("windows_exe", "console_exe"):
         p = os.path.dirname(os.path.abspath(sys.executable))
-        os.chdir(p)
+        os.chdir(p) # 修改目录,相当于cd
 
     config = shell.get_config(True)
     daemon.daemon_exec(config)

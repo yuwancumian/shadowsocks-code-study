@@ -37,6 +37,10 @@ verbose = 0
 
 
 def check_python():
+    """
+    检查python版本
+    """
+    #获取当前python interpreter的版本
     info = sys.version_info
     if info[0] == 2 and not info[1] >= 6:
         print('Python 2.6+ required')
@@ -113,8 +117,8 @@ def print_shadowsocks():
 def find_config():
     config_path = 'config.json'
     if os.path.exists(config_path):
-        return config_path
-    config_path = os.path.join(os.path.dirname(__file__), '../', 'config.json')
+        return config_path #先判断当前目录有没有配置文件
+    config_path = os.path.join(os.path.dirname(__file__), '../', 'config.json') #判断上次目录是否有配置文件
     if os.path.exists(config_path):
         return config_path
     return None
@@ -176,7 +180,7 @@ def get_config(is_local):
     global verbose
 
     logging.basicConfig(level=logging.INFO,
-                        format='%(levelname)-s: %(message)s')
+                        format='%(levelname)-s: %(message)s') # 日志的基础配置
     if is_local:
         shortopts = 'hd:s:b:p:k:l:m:c:t:vqa'
         longopts = ['help', 'fast-open', 'pid-file=', 'log-file=', 'user=',
