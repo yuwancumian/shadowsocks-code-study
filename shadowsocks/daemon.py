@@ -91,18 +91,23 @@ def freopen(f, mode, stream):
 
 
 def daemon_start(pid_file, log_file):
-
+    """
+    以守护进程的方式启动
+    """
+    #启动的时候先注册两个信号的处理方式,如果是用户Ctrl+C结束进程则linux程序结束代码为1,程序正常退出为0
     def handle_exit(signum, _):
         if signum == signal.SIGTERM:
             sys.exit(0)
         sys.exit(1)
 
-    signal.signal(signal.SIGINT, handle_exit)
-    signal.signal(signal.SIGTERM, handle_exit)
+    #出现以下信号就会执行退出,不同的退出方式,返回不同的状态码,通过注册回调函数来实现
+    signal.signal(signal.SIGINT, handle_exit)  #等同于Ctrl+C
+    signal.signal(signal.SIGTERM, handle_exit) #程序正常退出
 
+    #os.fork会创建一个子进程,在父进程环境中会返回子进程的pid(不为0),在子进程环境中会返回0
     # fork only once because we are sure parent will exit
     pid = os.fork()
-    assert pid != -1
+    assert pid != -1  #如果pid为-1则创建子进程失败,抛出异常
 
     if pid > 0:
         # parent waits for its child
