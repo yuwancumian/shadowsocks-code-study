@@ -47,7 +47,7 @@ def main():
         p = os.path.dirname(os.path.abspath(sys.executable))
         os.chdir(p) # 修改目录,相当于cd
 
-    config = shell.get_config(True)
+    config = shell.get_config(True) # config的数据类型为dict,就是用户配置的config.json
     daemon.daemon_exec(config)
 
     logging.info("starting local at %s:%d" %
@@ -65,6 +65,7 @@ def main():
         logging.warn('received SIGQUIT, doing graceful shutting down..')
         tcp_server.close(next_tick=True)
         udp_server.close(next_tick=True)
+    # 捕获并处理SIGQUIT信号,如果没有这个信号就注册SIGTERM信号,windows不支持SIGQUIT信号
     signal.signal(getattr(signal, 'SIGQUIT', signal.SIGTERM), handler)
 
     def int_handler(signum, _):
