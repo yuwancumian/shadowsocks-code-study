@@ -68,6 +68,9 @@ def to_bytes(s):
 
 
 def to_str(s):
+    """
+    python3中显性表达了byte和str的不同
+    """
     if bytes != str:
         if type(s) == bytes:
             return s.decode('utf-8')

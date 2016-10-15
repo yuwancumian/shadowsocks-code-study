@@ -110,7 +110,7 @@ def daemon_start(pid_file, log_file):
     assert pid != -1  #如果pid为-1则创建子进程失败,抛出异常
 
     if pid > 0:
-        # parent waits for its child
+        # 父进程睡眠,等待
         time.sleep(5)
         sys.exit(0)
 

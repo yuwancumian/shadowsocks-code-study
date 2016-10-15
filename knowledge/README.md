@@ -40,3 +40,9 @@ None
 woman
 
 ```
+
+2. python3中byte和str的转换
+
+`由于python3中byte和str类型显性不同,默认是不会自动转换的`
+
+![转换](https://raw.githubusercontent.com/hellorocky/blog/master/picture/byte2str.jpg)
