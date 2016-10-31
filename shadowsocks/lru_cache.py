@@ -75,9 +75,9 @@ class LRUCache(collections.MutableMapping):
         # O(m)
         now = time.time()
         c = 0
-        while len(self._last_visits) > 0:
-            least = self._last_visits[0]
-            if now - least <= self.timeout:
+        while len(self._last_visits) > 0: # 最近请求时间的一个双端队列列表,里面的元素是浮点类型时间戳
+            least = self._last_visits[0] # 获取距离现在时间最长的那个时间戳
+            if now - least <= self.timeout: # 如果队列中距离现在时刻最长的那个时间戳都没有超时的话就退出当前while循环,否则继续
                 break
             if self.close_callback is not None:
                 for key in self._time_to_keys[least]:

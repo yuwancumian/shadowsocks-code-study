@@ -110,7 +110,8 @@ def daemon_start(pid_file, log_file):
     assert pid != -1  #如果pid为-1则创建子进程失败,抛出异常
 
     if pid > 0:
-        # 父进程睡眠,等待
+        # 这里睡眠5秒钟的目的是1, 如果5秒钟之内没有收到子进程发来的SIGINT信号 2,或者收到SIGTERM信号就认为子进程启动成功,带着exitcode=0退出,
+        #否则exitcode=1,可以通过查看退出状态码来判断子进程是否启动成功
         time.sleep(5)
         sys.exit(0)
 
