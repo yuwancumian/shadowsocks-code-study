@@ -19,6 +19,7 @@ SIGHUP  现在常用于平滑重启服务,比如nginx,ssh等
 其他相关:
 core dump  核心文件通常在系统收到特定的信号时由操作系统生成。信号可以由程序执行过程中的异常触发，也可以由外部程序发送。动作的结果一般是生成一个某
 个进程的内存转储的文件，文件包含了此进程当前的运行堆栈信息。一般用于调试.
+Ctrl+D 这不是一个信号,仅仅代表输入的结束,end of file.Ctrl+D, when typed at the start of a line on a terminal, signifies the end of the input. This is not a signal in the unix sense: when an application is reading from the terminal and the user presses Ctrl+D, the application is notified that the end of the file has been reached (just like if it was reading from a file and had passed the last byte).
 """
 
 
