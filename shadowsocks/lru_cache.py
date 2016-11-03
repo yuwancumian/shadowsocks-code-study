@@ -35,12 +35,12 @@ class LRUCache(collections.MutableMapping):
     """This class is not thread safe"""
 
     def __init__(self, timeout=60, close_callback=None, *args, **kwargs):
-        self.timeout = timeout
+        self.timeout = timeout  # 缓存多长时间的DNS解析结果
         self.close_callback = close_callback
-        self._store = {}
-        self._time_to_keys = collections.defaultdict(list)
-        self._keys_to_last_time = {}
-        self._last_visits = collections.deque()
+        self._store = {}  # 存储域名-->IP的解析结果
+        self._time_to_keys = collections.defaultdict(list)  # {timestamp: [google.com, facebook.com, ...], ...}
+        self._keys_to_last_time = {}  # 每一个域名被解析/被访问的时间戳映射,{google.com: timestamp, facebook.com: timestamp,...}
+        self._last_visits = collections.deque()  # 时间戳队列,先入先出
         self._closed_values = set()
         self.update(dict(*args, **kwargs))  # use the free update to set keys
 
@@ -79,14 +79,14 @@ class LRUCache(collections.MutableMapping):
             least = self._last_visits[0] # 获取距离现在时间最长的那个时间戳
             if now - least <= self.timeout: # 如果队列中距离现在时刻最长的那个时间戳都没有超时的话就退出当前while循环,否则继续
                 break
-            if self.close_callback is not None:
-                for key in self._time_to_keys[least]:
-                    if key in self._store:
-                        if now - self._keys_to_last_time[key] > self.timeout:
-                            value = self._store[key]
-                            if value not in self._closed_values:
-                                self.close_callback(value)
-                                self._closed_values.add(value)
+            if self.close_callback is not None:  # 如果关闭的回调函数不为空
+                for key in self._time_to_keys[least]:  # 遍历距离现在时间最长的那个时刻的解析/访问域名列表
+                    if key in self._store:  # 如果已经缓存了解析结果
+                        if now - self._keys_to_last_time[key] > self.timeout:  # 如果这个域名最近一次访问/解析的时间超过设定的超时时间
+                            value = self._store[key]  # 获取这个IP地址
+                            if value not in self._closed_values:  #
+                                self.close_callback(value)  # 将这个IP地址传递给关闭时回掉函数
+                                self._closed_values.add(value)  # 并把这个IP地址添加到closed_values set中
             self._last_visits.popleft()
             for key in self._time_to_keys[least]:
                 if key in self._store:
