@@ -84,19 +84,19 @@ class LRUCache(collections.MutableMapping):
                     if key in self._store:  # 如果已经缓存了解析结果
                         if now - self._keys_to_last_time[key] > self.timeout:  # 如果这个域名最近一次访问/解析的时间超过设定的超时时间
                             value = self._store[key]  # 获取这个IP地址
-                            if value not in self._closed_values:  #
+                            if value not in self._closed_values:  # 如果这个IP地址不在将被清空的列表里
                                 self.close_callback(value)  # 将这个IP地址传递给关闭时回掉函数
-                                self._closed_values.add(value)  # 并把这个IP地址添加到closed_values set中
-            self._last_visits.popleft()
-            for key in self._time_to_keys[least]:
-                if key in self._store:
-                    if now - self._keys_to_last_time[key] > self.timeout:
-                        del self._store[key]
-                        del self._keys_to_last_time[key]
-                        c += 1
-            del self._time_to_keys[least]
-        if c:
-            self._closed_values.clear()
+                                self._closed_values.add(value)  # 并把这个IP地址添加到待清空的列表里
+            self._last_visits.popleft()  # 删除时间戳队列中距离现在时刻最长的那一个时间戳
+            for key in self._time_to_keys[least]:  # 遍历距离现在时刻最长的那个时间戳所对应的访问/解析的域名列表
+                if key in self._store:  # 如果这个域名在待删除的结合中
+                    if now - self._keys_to_last_time[key] > self.timeout:  # 如果这个域名访问的时间戳超过定义的超时时间(超时)
+                        del self._store[key]  # 从待删除集合中删除该域名
+                        del self._keys_to_last_time[key]  # 从域名-->timestamp字典中删除该元素
+                        c += 1  # 开始定义为0,每次遇到一个符合删除条件的就加1
+            del self._time_to_keys[least]  # 从{timestamp: [google.com,facebook.com...],...}中删除距离现在时刻最长的那个时间戳
+        if c:  # 如果待删除的域名个数不为0的话
+            self._closed_values.clear()  # 清空待删除集合
             logging.debug('%d keys swept' % c)
 
 

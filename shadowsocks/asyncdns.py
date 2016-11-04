@@ -256,7 +256,7 @@ class DNSResolver(object):
         self._cb_to_hostname = {}
         self._cache = lru_cache.LRUCache(timeout=300)
         self._sock = None
-        if server_list is None:
+        if server_list is None:  # 如果没有指定DNS服务器的话执行如下逻辑
             self._servers = None
             self._parse_resolv()
         else:
@@ -277,13 +277,13 @@ class DNSResolver(object):
                 for line in content:
                     line = line.strip()
                     if not (line and line.startswith(b'nameserver')):
-                        continue
+                        continue  # continue的意思是如果遇到为空或者不以nameserver为开头的情况就不往下执行重新遍历下一个元素
 
                     parts = line.split()
                     if len(parts) < 2:
-                        continue
+                        continue  # 和上面的解释类似,continue结合for循环使用,以后遍历元素要考虑不符合情况
 
-                    server = parts[1]
+                    server = parts[1]  # 获取配置文件中的DNS地址
                     if common.is_ip(server) == socket.AF_INET:
                         if type(server) != str:
                             server = server.decode('utf8')
