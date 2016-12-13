@@ -116,7 +116,7 @@ def inet_pton(family, addr):
     else:
         raise RuntimeError("What family?")
 
-# 判断是否为合法的IP地址
+# 判断是否为合法的IP地址,这里使用了内置的函数的判断IP的方法,没有自己造轮子
 def is_ip(address):
     for family in (socket.AF_INET, socket.AF_INET6):
         try:
