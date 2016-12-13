@@ -73,25 +73,26 @@ QCLASS_IN = 1
 
 
 def build_address(address):
+    """将被解析的域名从python内建字符串转换成网络字节用于向上游请求解析"""
     address = address.strip(b'.')
     labels = address.split(b'.')
     results = []
     for label in labels:
         l = len(label)
-        if l > 63:
+        if l > 63:  # 域名中的每一部分长度不能超过63字节
             return None
-        results.append(common.chr(l))
+        results.append(common.chr(l))  # label就是域名中的每一部分,构建请求体的时候,questions这一部分是label长度后紧跟label字符
         results.append(label)
-    results.append(b'\0')
+    results.append(b'\0')  # 然后以0为结束标志
     return b''.join(results)
 
 
 def build_request(address, qtype):
-    request_id = os.urandom(2)
-    header = struct.pack('!BBHHHH', 1, 0, 1, 0, 0, 0)
-    addr = build_address(address)
-    qtype_qclass = struct.pack('!HH', qtype, QCLASS_IN)
-    return request_id + header + addr + qtype_qclass
+    request_id = os.urandom(2)  # 随机的2个字节
+    header = struct.pack('!BBHHHH', 1, 0, 1, 0, 0, 0)  # 2个B代表ID后面的标志字段,该字段中只有(recurcision desired)为1,其他都为0
+    addr = build_address(address)                      # 所以为00000001.00000000即1,0,共占2个字节,后面的1为query count
+    qtype_qclass = struct.pack('!HH', qtype, QCLASS_IN)# 因为是请求头部,后面的count部分都为0, qtype为DNS类型,一般为A类型,代表IPv4解析
+    return request_id + header + addr + qtype_qclass  # 组成完整的DNS请求头
 
 
 def parse_ip(addrtype, data, length, offset):
