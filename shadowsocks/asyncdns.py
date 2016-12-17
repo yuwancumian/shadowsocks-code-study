@@ -73,7 +73,7 @@ QCLASS_IN = 1
 
 
 def build_address(address):
-    """将被解析的域名从python内建字符串转换成网络字节用于向上游请求解析"""
+    """将被解析的域名从python内建字符串转换成二进制编码格式用于向上游请求解析"""
     address = address.strip(b'.')
     labels = address.split(b'.')
     results = []
